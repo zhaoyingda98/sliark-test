@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliark版形声考</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <button onclick="location.href='explanation.html'" class="explanation-btn">説明</button>
+    
+    
+    <h1>Sliark版形声考</h1>
+
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="請輸入一個繁體字">
+        <button onclick="searchAdvanced()">查字</button>
+        <button onclick="searchData()">查聲符</button>
+        <button onclick="searchByRegex()">查聲域</button>
+        <button onclick="searchByRegexIn7th()">查上古音</button>
+        <button onclick="searchByMiddleChinese()">查中古聲母</button>
+        <button onclick="searchByMiddleRhyme()">查中古聲母</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
