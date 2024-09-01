@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV文件检索</title>
+    <script>
+        var csvData = [
+            ["五", "ŋa", "A", "吾", "ŋ'", "a", "ŋ'a", "ngo", "疑", "", "一", "模", "平", "五乎", "吾鼯𪁙𧋋浯䓊㹳珸郚齬鯃娪梧峿"],
+            ["五", "ŋa", "B", "", "ŋ", "aʔ", "ŋaʔ", "ngyoq", "疑", "開", "三", "魚", "上", "魚巨", "語敔圄衙齬鋙"],
+            ["五", "ŋa", "B", "", "sŋ", "aʔ", "sŋaʔ", "siaeq", "心", "開", "三", "麻", "上", "悉姐", "𣬕"],
+            ["魚", "ŋa", "A", "穌", "sŋ'", "a", "sŋ'a", "so", "心", "", "一", "模", "平", "素姑", "蘇穌㢝酥"],
+            ["魚", "ŋa", "B", "", "ŋ", "a", "ŋa", "ngyo", "疑", "開", "三", "魚", "平", "語居", "魚𩺰漁𩼪䰻䱷䁩"],
+            ["梟", "Kew", "B", "", "ŋ", "a", "qwe", "ngyo", "疑", "開", "三", "魚", "平", "語居", "魚𩺰漁𩼪䰻䱷䁩"]
+        ];
+
+        function searchByRegex(columnIndex) {
+            var inputPattern = document.getElementById("inputChar").value.trim();
+            var results = document.getElementById("results");
+            results.innerHTML = "";
+
+            // 检查输入内容是否为空
+            if (inputPattern === "") {
+                results.innerHTML = "请输入正则表达式进行检索。";
+                return;
+            }
+
+            var matchFound = false;
+
+            try {
+                var regex = new RegExp(inputPattern);
+            } catch (e) {
+                results.innerHTML = "无效的正则表达式。";
+                return;
+            }
+
+            for (var i = 0; i < csvData.length; i++) {
+                var row = csvData[i];
+                if (regex.test(row[columnIndex].trim())) {
+                    matchFound = true;
+                    var rowString = row.join(", ");
+                    var resultItem = document.createElement("div");
+                    resultItem.textContent = rowString;
+                    results.appendChild(resultItem);
+                }
+            }
+
+            if (!matchFound) {
+                results.innerHTML = "未找到匹配的结果。";
+            }
+        }
+
+        function searchByPartialMatch(columnIndex) {
+            var inputChar = document.getElementById("inputChar").value.trim();
+            var results = document.getElementById("results");
+            results.innerHTML = "";
+
+            // 检查输入内容是否为空
+            if (inputChar === "") {
+                results.innerHTML = "请输入内容进行检索。";
+                return;
+            }
+
+            var matchFound = false;
+
+            for (var i = 0; i < csvData.length; i++) {
+                var row = csvData[i];
+                if (row[columnIndex].includes(inputChar)) {
+                    matchFound = true;
+                    var matchingFirstColumn = row[0];
+
+                    // 查找与第一列内容相同的所有行
+                    for (var j = 0; j < csvData.length; j++) {
+                        if (csvData[j][0] === matchingFirstColumn) {
+                            var rowString = csvData[j].join(", ");
+                            var resultItem = document.createElement("div");
+                            resultItem.textContent = rowString;
+                            results.appendChild(resultItem);
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (!matchFound) {
+                results.innerHTML = "未找到匹配的结果。";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>CSV文件检索</h1>
+    <label for="inputChar">输入内容：</label>
+    <input type="text" id="inputChar" />
+    <button onclick="searchByRegex(1)">检索諧聲域（第2列，正则表达式）</button>
+    <button onclick="searchByPartialMatch(14)">检索字（第15列，包含匹配）</button>
+    <button onclick="searchByRegex(6)">检索拟音（第7列，正则表达式）</button>
+
+    <h2>检索结果</h2>
+    <div id="results"></div>
+</body>
+</html>
